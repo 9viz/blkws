@@ -1,4 +1,4 @@
-use std::{fs, process};
+use std::{fs, process, io::Write};
 
 fn grab_websitelinks<'a>(links: &'a str, website: &'a str) -> Vec<&'a str> {
     /*
@@ -41,6 +41,25 @@ fn mkblockstring(website_links: &Vec<&str>) -> String {
     return content_hosts;
 }
 
+fn block(block_string: &String) {
+    /*
+     * write to /etc/hosts
+     */
+
+    let host_file: &str = "/etc/hosts";
+
+    let mut fhosts = fs::OpenOptions::new()
+        .append(true)
+        .open(host_file)
+        .unwrap_or_else(|e| {
+            eprintln!("error: {}", e);
+            process::exit(1);
+        });
+
+    fhosts.write_all(block_string.as_str().as_bytes())
+        .unwrap_or_else(|e| { eprintln!("error {}", e); process::exit(1); });
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -66,5 +85,16 @@ mod test {
         let links = grab_websitelinks(&contents, "website");
 
         println!("{}", mkblockstring(&links));
+    }
+
+    #[test]
+    fn write_test() {
+        let contents = fs::read_to_string(
+            "/home/viz/usr/src/rust/blkhst/src/template"
+        ).unwrap();
+
+        let links = grab_websitelinks(&contents, "website");
+
+        block(&mkblockstring(&links));
     }
 }
