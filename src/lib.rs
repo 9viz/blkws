@@ -9,7 +9,6 @@ fn grab_websitelinks<'a>(links: &'a str, website: &'a str) -> Vec<&'a str> {
 
     let links: Vec<&str> = links.lines().collect();
     let nlinks: usize = links.len() - 1;
-    let mut site_links: Vec<&str> = vec![];
 
     let ind_website = links.iter()
         .position(|&x| x == format!("[{}]", website))
@@ -17,12 +16,13 @@ fn grab_websitelinks<'a>(links: &'a str, website: &'a str) -> Vec<&'a str> {
             process::exit(1);
         });
 
-    for l in links[ind_website+1..nlinks].iter() {
-        if l == &"" { break; }
-        site_links.push(l);
-    }
+    let ind_end = links[ind_website..nlinks].iter()
+        .position(|&x| &x == &"")
+        .unwrap_or_else(|| {
+            process::exit(1);
+        });
 
-    return site_links;
+    return links[ind_website+1..ind_end].to_vec();
 }
 
 fn mkblockstring(website_links: &Vec<&str>) -> String {
@@ -57,7 +57,10 @@ fn block(block_string: &String) {
         });
 
     fhosts.write_all(block_string.as_str().as_bytes())
-        .unwrap_or_else(|e| { eprintln!("error {}", e); process::exit(1); });
+        .unwrap_or_else(|e| {
+            eprintln!("error {}", e);
+            process::exit(1);
+        });
 }
 
 #[cfg(test)]
