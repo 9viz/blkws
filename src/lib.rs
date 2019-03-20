@@ -43,6 +43,9 @@ pub fn unblock(links_path: &str, website: &str) {
         website
     );
 
+    let blocked_websites = util::mkblockstring(&blocked_websites);
+    let blocked_websites: Vec<&str> = blocked_websites.lines().collect();
+
     let mut new_hostfile: String = String::new();
 
     let cur_hostfile = fs::read_to_string(&"/etc/hosts")
@@ -56,7 +59,7 @@ pub fn unblock(links_path: &str, website: &str) {
 
     for line in cur_hostfile.iter() {
         if ! blocked_websites.contains(&line) {
-            new_hostfile.push_str(line);
+            new_hostfile.push_str(&format!("{}\n", line));
         }
     }
 
