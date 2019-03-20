@@ -4,7 +4,7 @@ use crate::rand;
 pub fn get_links(links_path: &str) -> String {
     let links = fs::read_to_string(links_path)
         .unwrap_or_else(|e| {
-            eprintln!("error: {}", e);
+            println!("error: {}", e);
             process::exit(0);
         });
 
@@ -24,12 +24,14 @@ pub fn grab_websitelinks<'a>(links: &'a str, website: &'a str) -> Vec<&'a str> {
     let ind_website = links.iter()
         .position(|&x| x == format!("[{}]", website))
         .unwrap_or_else(|| {
+            eprintln!("can't parse config");
             process::exit(1);
         });
 
-    let ind_end = links[ind_website..nlinks].iter()
+    let ind_end = links[ind_website..=nlinks].iter()
         .position(|&x| &x == &"")
         .unwrap_or_else(|| {
+            eprintln!("can't parse config2");
             process::exit(1);
         });
 
