@@ -19,19 +19,18 @@ pub fn grab_websitelinks<'a>(links: &'a str, website: &'a str) -> Vec<&'a str> {
      */
 
     let links: Vec<&str> = links.lines().collect();
-    let nlinks: usize = links.len() - 1;
 
     let ind_website = links.iter()
         .position(|&x| x == format!("[{}]", website))
         .unwrap_or_else(|| {
-            eprintln!("can't parse config");
+            eprintln!("failed to parse the config");
             process::exit(1);
         });
 
-    let ind_end = links[ind_website..=nlinks].iter()
-        .position(|&x| &x == &"")
+    let ind_end = links.iter()
+        .position(|&x| x == format!("[/{}]", website))
         .unwrap_or_else(|| {
-            eprintln!("can't parse config2");
+            eprintln!("failed to parse the config");
             process::exit(1);
         });
 

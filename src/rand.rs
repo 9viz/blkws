@@ -15,7 +15,7 @@ unsafe fn gen_rand() {
 }
 
 pub unsafe fn rand_range(upper_limit: u64) -> u64 {
-    if RAND == 1 { for _ in 0..2 { gen_rand(); } }
+    if RAND == 1 { for _ in 0..4 { gen_rand(); } }
     gen_rand();
 
     RAND % upper_limit
