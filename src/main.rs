@@ -2,7 +2,7 @@ use std::{env, process, path::Path};
 use blkws;
 
 fn usage() {
-    println!("Usage: blkws [block/unblock] website");
+    println!("Usage: blkws {{,un}}block website");
     process::exit(1);
 }
 
@@ -35,7 +35,7 @@ fn main() {
 
     match &args[1].as_str() {
         &"block" => { blkws::block(&rc, &args[2].as_str()); },
-        &"unblock" => { blkws::unblock(&rc, &args[2].as_str()); },
+        &"unblock"|&"ublock" => { blkws::unblock(&rc, &args[2].as_str()); },
         _ => { eprintln!("unrecongnized flag!"); usage(); },
     }
 
