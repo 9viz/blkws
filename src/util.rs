@@ -77,8 +77,8 @@ pub fn puzzle() -> bool {
 
     for _ in 0..5 {
         unsafe {
-        let n1 = rand::rand_range(7);
-        let n2 = rand::rand_range(13);
+        let n1 = rand::rand_range(7, 13);
+        let n2 = rand::rand_range(13, 25);
         let r = n1 + n2;
 
         let uans = input(&format!("What is {} + {}? ", n1, n2));

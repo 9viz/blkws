@@ -14,9 +14,9 @@ unsafe fn gen_rand() {
     RAND = (a * RAND+ c) % m
 }
 
-pub unsafe fn rand_range(upper_limit: u64) -> u64 {
+pub unsafe fn rand_range(lower_limit: u64, upper_limit: u64) -> u64 {
     if RAND == 1 { for _ in 0..4 { gen_rand(); } }
     gen_rand();
 
-    RAND % upper_limit
+    RAND % (upper_limit + 1 - lower_limit) + lower_limit
 }
