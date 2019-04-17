@@ -11,7 +11,7 @@ unsafe fn gen_rand() {
     let c: u64 = 2;
     let m: u64 = 2_u64.pow(24) + RAND % 3;
 
-    RAND = (a * RAND+ c) % m
+    RAND = (a * RAND + c) % m
 }
 
 pub unsafe fn rand_range(lower_limit: u64, upper_limit: u64) -> u64 {
